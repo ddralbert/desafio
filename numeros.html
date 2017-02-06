@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>ordenar números enteros</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+        <form class="form-inline">
+            <h3>Ingresar números enteros</h3>
+            <br>
+            <div class="form-group">
+                <input type="text" id="numero" class="form-control">
+            </div>
+            
+            <button type="button" id="almacenar" class="btn btn-primary">Almacenar</button>
+            <br><br>
+            
+            <div id="numeros_registrados"></div>
+            <br>
+            
+            <button type="button" id="ordenar" class="btn btn-primary">Ordenar</button> <button type="button" id="reiniciar" class="btn btn-warning">Reiniciar</button>
+            <br><br>
+            
+            <div id="numeros_ordenados"></div>
+        </form>
+        </div>
+    </body>
+    
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://aishek.github.io/jquery-animateNumber/javascripts/jquery.animateNumber.js"></script>
+<script>
+    
+    $(document).ready(function(){
+        //enfoco el input una vez la pagina haya cargado
+        $("input").focus();
+    });
+    
+    //varibale array numeros, ahi guardo los valores desde mi input
+    var numeros = new Array();
+
+/******************************************FUNCION PARA ALMACENAR NUMEROS ENTEREOS************************************************/    
+    $("#almacenar").click(function(){
+        
+        //vacio los números previamente ordenados
+        $("#numeros_ordenados").html('');
+        
+        //el valor asignado en el #numero pasa a la variable valor
+        valor = $("#numero").val();
+        
+        if (!isNaN(valor) && valor !== ""){
+            //si el valor es entero y no está en blanco reviso si este numero existe en el arreglo 
+            if($.inArray(valor, numeros) === -1){
+                //si el valor no existe en el arreglo, almaceno el número en dicho arreglo
+                numeros.push(valor);
+                
+                //agrego en el div numeros_registrados, el valor correctamente verificado
+                $("#numeros_registrados").append('<span class="badge">'+valor+'</span>');
+                
+                //genero un efecto de aparición en el ultimo valor agregado - 500 milisegundos en hacer la aparicion
+                $("span:last").hide().fadeIn(500);
+                
+                //blanqueo y enfoco input
+                blanquear_enfocar();
+                
+            }else{
+                //si el valor existe en el arreglo, se muestra este mensaje 
+                alert(valor+' ya se encuentra almacenado, por favor coloque un nuevo número');
+                
+                //blanqueo y enfoco input
+                blanquear_enfocar();
+            }
+            
+        }else{
+            //si el valor no es un número entero muestro este error
+            alert(valor+' no es un número entero, por favor intente nuevamente');
+            
+            //blanqueo y enfoco input
+            blanquear_enfocar();
+        }
+    });
+    
+/************************************FUNCION PARA MOSTRAR LOS NUMEROS ORDENADOS*************************************/    
+    $("#ordenar").click(function(){
+        
+        if(numeros !== ''){
+        
+            //vacio los números previamente ordenados
+            $("#numeros_ordenados").html('');
+
+            //ordena los numeros de manera ascendnte
+            numeros.sort(function(a, b){return a-b});
+
+            //por cada elemento del arreglo, muestro los valores
+            $.each( numeros, function( key, value ) {
+                //agrego en el div numeros_oerdenados, el elemento del arreglo
+                $("#numeros_ordenados").append('<span class="badge">'+value+'</span>');
+
+                //muestro una animacion por cada ultimo elemento mostrado
+                $("span:last").animateNumber({ number: value });
+            });
+        }
+    });
+    
+/************************************FUNCION PARA REINICIAR*************************************/    
+    $("#reiniciar").click(function(){
+        //vacio los números ordenados
+        $("#numeros_ordenados").html('');
+        
+        //vacio los numeros registrados
+        $("#numeros_registrados").html('');
+        
+        //vacio el arreglo
+        numeros = new Array();
+        
+        //blanqueo y enfoco input
+        blanquear_enfocar();
+    });    
+    
+/***************************************FUNCION PARA BLANQUEAR INPUT Y ENFOCARLO*******************************/    
+function blanquear_enfocar(){
+    
+    //blanqueo y enfoco input
+    $("#numero").val('').focus();   
+}
+</script>
+<!--
+
+Justificación de uso de librerías
+
+- Para este desafio utilicé Bootstrap versión 3 para obtener una mejor visualizacion a la hora de mostrar los números y los botones
+
+- Se utilizó Jquery, para el llamado simplificado de funciones, cambiar o alterar elementos HTML, ordenamieno del arreglo y utilizar el efecto fade para mostrar el último numero almacenado. Jquery es la herramienta principal para la realización de este desafío, sin dicha librería no se podría hacer ni la mitad de lo realizado
+
+- Por ultimo se utilizó la librería jquery-animateNumber para darle un efecto de animación para mostrar los números
+
+-->
